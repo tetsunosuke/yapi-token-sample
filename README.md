@@ -1,0 +1,79 @@
+# サンプル内容物一覧
+
+- README.md: このファイルです
+- get_code.php: 認可コードを取得するためのサンプルです
+- get_token.php: トークンを取得するためのサンプルです
+- refresh_token.php: リフレッシュトークンを用いてトークンを取得するためのサンプルです
+
+# 注意
+
+このサンプルではリダイレクトURLとして http://localhost を設定しているので、アプリケーション設定において、`コールバックURL` には `http://localhost` を入れておいてください。
+
+※ ローカルでサーバは不要です。エラーになりますが無視して良いです
+
+# アクセストークンの取得について
+
+大きな流れは [アクセストークンの取得方法（v1）]( https://developer.yahoo.co.jp/webapi/shopping/help.html#accesstoken) に記載があります
+
+## トークン取得の流れ
+
+  1. 「Authorizationエンドポイント」にリクエストする。
+  2. リダイレクトされたペ－ジのパラメータから「認可コード（code）」を取得する。
+  3. 「Tokenエンドポイント」にリクエストをしてトークン情報を取得する。
+
+この順番で実施していきます
+
+### 認可コードの取得
+
+サンプルでは
+
+```
+$ php get_code.php
+```
+
+で得られたURLをブラウザにコピーして進んでください。最終的に、
+
+```
+ここで出てきたURLを貼り付けてブラウザに貼ります
+https://auth.login.yahoo.co.jp/yconnect/v2/authorization?response_type=code%20token&client_id=dj00aiZpPUVKV3J4MGZWYkEzMyZzPWNvbnN1bWVyc2VjcmV0Jng9NTk-&redirect_uri=http%3A%2F%2Flocalhost&scope=openid
+```
+
+上記のような結果を得るので、そのURLでブラウザで遷移し、必要なログイン、許可等を行うことでURLへ遷移します。
+
+遷移した結果のURLは、
+
+```
+http://localhost/#access_token=8IjP9Kspu7XaHWdXIwg_BZ8Bf_uYwJUw4SqvvNdXW.2q6ThQqs5Tj3lUTuTu.xLe7HgkzJTNwKyLuwH7zRjitZaWbJi0Ico_0iCzsweOQjIX.4Dy2zE23zX_ACIqE_Y.ofCmnasWFzBVJZS3C4pqLEmkaAAjlNi2xsam6LgymyiLqZRzfM.B8t4SuEH6D9dLNghOjBA.HXS.PxYJKWXZQtjLz5Mv.hai5AcBLGH6_Fxpd9aEiQMtcZGNq3Gxbk0WEIgsTjTTgeQWDTXR9IPqpi6inWp6ozpgoP7nqJ2NXsxmaEhIIfjJgg7oKrNgVdmWoZ7sW5iIqAVQAAht3_aGTXD5P8yhoaG1J9b7BJBUacOmNDrlXXoz5yOn.KrW9TtOUrVJzmp3dtyQ5QzvfhZxy8urC14OUp5stVSebF5laLlKg1.3SvER8xpfaE1BJMGYefeFGg8vQQ2lXM09A.U2Rwq.grDdw_kIxbt1p12LneY05ADMkTSZX9Lj5ymDdkHGe.Mh5ugK7IyOdeNiCL4lxO.p0M3_wleQn_zz06BLho8zFTvV5ZiVvTk5LA2Xaf40dInoAlRyNUXISXiKY9dMs8XybAR3G6dkxG2EVvRUYT..ObG2Mm8zZTgkO8m2NGAnDHhHCaXsYhwEm6ugfDIu3ZFE2Fh0aYt5rkKFLS1iCN6rNozT0JM0ouRQZucgq2YV6NBfZDmyA4rUMNqErBusjSg6JM_7MRKWB5b6FiQkvBUaIwrFAry3dCPjhq92lNQiV.DDrmlSn06f1WOIa56U15jtk9dxpTGX9Jt2N7m1CJXbTnW_AWf1fKcUvfCZ3t2K.fABa1jn9RTr7HhUhE5Fq6Od2gSYjS5ACXUVbLKNNp8ayHfkpgjzG4oTwxnCijHUre1U9zqqoYr9QDV8177YfYwcBoRsrfdl6lblHx7NE9Lw6l5whGdk_..KnSWLKTQEmS5KEZlPyPuQ_bJYTQ3KnjsLKycYKZ6cQjey2jkA3C.jAoHNXhhJJpt2WGBsSkxGZviss2OMvgfug.Lk7aQsIprK9t7HXL5DvhSUsrYD4bZLMowsR1QasPInwz6ytrQfSUZJ4H92hdynlzlsAfCEUu1.GJ1qCTFL1ojuKkKApyh3ChkjzX5zE5rQ0U7t.pAB8DOYHTVjFp7RA_Q5Ep_jtBOA4kfFpWSNNGfsHfCZJCifbpGuonXPx4dZG7ThX7AqNNjvKz0POqTAtAsmvQHmUxb9oaIUxpvyzRo2xC3jVbB6Kvi98alQ9QXJluVVrNqhMo.aoIiBwGYvQ4owYMuzuaUTtu8djdY0MT1OucJAX0bv67LKa.AYxCTpthUUmbz_0Vdmn32G7rDVgXf8nPzmojjSpV4IETC9VjaTIzo7YKTgclJI94FB3BF1TD3VugMLkaVrjP3jAr_mYpoMirl.TV0RcYk.n53dR.4GM5OUHJjV5XHJ8PYWtycuB.5SD.QSqYOmhJJY2EHO9M2uTHViWykxYUQDv4mVIjjrtJ3pRQj1GKeG.u3ET6i_.2sscEdEGPZcZ5krENzrh7Z1X0NeueRThkhnzLMISUUnZ8km0aulsBWrqCSl5qkxnwwvzdpdvCd6Fhu3cBdcgZA87xJsROHY2Bo8AlgvBg3hloPrZT0c1wbQqcI.Cj.jVt10HYpEN87T03gDsD2nSWln3aXMSpoaI787tCoilIJtEaOo0Zo_JA4Q6_S7pQBV2HsPbSuIRNDzeEpnzxbDnNtuDkjwsxQVbEnihCnnx57xCR_WPnvL.zLLAiiostmjlCM7rDXutpGBmXgrvncV62UPgn8o4gMt46wxihyhimkliGFBOd2p74oWSUSh8_yWutSq5fVRHbw6_p5GXWEcXQ9AuUQeq_AYFrq4YRjw0SBAUmZM54rKCGKtOjtoW.q_cOjtUGf9I8ZK65_K6OETQXEjv5w3dp9tjcxoWs0XZSaMBXWk6EFW_GzdumyZc7zNCKEEGeqqe8YHSp8SQV77xDugIcEY4cgxsXLp_TWEet.b6h.U9GgAWwrh7l03spaHP0pxLQF.TgdOZlwJO.JzEQKG.FD8NEmf9lJp6WMejDqBxmYURmCUR6qT1iNp4g.wtW0uJ1kTAvD5vClu0qK_SIJ4ntoOSOEpK1igJg2LZIc1uEjYfL.DyRoZ4Koh27qphKGgUJ_c1h_6_BAtIe0heizaoG1n8rcB7dmW8obcIVMUPPzq4i65&token_type=Bearer&expires_in=3600&code=L5mHHwpG
+```
+
+このようなURLになりますが、最終的には
+
+```
+.....in=3600&code=L5mHHwpG
+```
+
+最後の code= の値だけが必要となります
+
+
+### トークンの取得
+
+get_token.php  に code を記入し、
+
+```
+$ php get_token.php
+```
+
+とすることでトークンを得ることができます。 access_token, refresh_token を保存しておきましょう。
+
+
+### トークンのリフレッシュ
+
+refresh_token を refresh_token.php に記入し
+
+```
+$ php refresh_token.php
+```
+
+とすることでトークンのリフレッシュができるはずです。
+
+
