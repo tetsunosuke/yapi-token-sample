@@ -1,6 +1,9 @@
 <?php
-// 先程取得した認可コードを入れてください
-define('CODE',"w1cImcZh");
+if (!isset($_GET["code"])) {
+    echo file_get_contents("get_token.html");
+    exit;
+}
+define('CODE',$_GET["code"]);
 define('APPID', 'dj00aiZpPUVKV3J4MGZWYkEzMyZzPWNvbnN1bWVyc2VjcmV0Jng9NTk-');
 define('SECRET', 'a8mx7pufdFZXe41FSZIw4vuKLOLKAerdXk9IYxc6');
 /**
@@ -29,7 +32,7 @@ define('TOKEN_URL', 'https://auth.login.yahoo.co.jp/yconnect/v2/token');
 
 
 // サンプルコードに合わせて名前をリネームしているだけです
-define('CALLBACK_URL', 'http://localhost');
+define('CALLBACK_URL', 'http://localhost/get_token.php');
 
 $header = [
     'Content-Type: application/x-www-form-urlencoded',
@@ -61,7 +64,8 @@ curl_close($ch);
 $token = json_decode($response, true);
 
 // 実行した結果は下記に別枠で記載しております。
-$keys = ["access_token", "id_token", "refresh_token"];
+$keys = ["access_token", "expires_in", "refresh_token"];
+var_dump($token);
 foreach($keys as $key) {
     echo "$key: $token[$key]" . PHP_EOL;
 }

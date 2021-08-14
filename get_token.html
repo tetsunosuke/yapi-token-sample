@@ -1,0 +1,11 @@
+<script>
+    // リダイレクトされてきたURLから code を取り出してURL転送する
+    const code = location.hash.replace("#","").split("&").filter( (v) => {
+        [key, value] = v.split("=");
+        return key === "code";
+    }).map((v) => {
+        [key, value] = v.split("=");
+        return value;
+    });
+    location.href ="/get_token.php?code=" + code;
+</script>

@@ -35,17 +35,11 @@ $query = http_build_query(
     [
         "response_type" => "code token",
         "client_id" => APPID,
-        "redirect_uri" => "http://localhost", // とりあえず。コールバックURLにいれとく必要があります
+        "redirect_uri" => "http://localhost/get_token.php", // とりあえず。コールバックURLにいれとく必要があります
         "scope" => "openid",
     ], "", "&", PHP_QUERY_RFC3986
 );
 $url = AUTHORIZATION_URL . "?" . $query;
-echo "ここで出てきたURLを貼り付けてブラウザに貼ります" . PHP_EOL;
+header("Location: $url");
 echo $url;
-
-/**
- * 2. リダイレクトされたペ－ジのパラメータから「認可コード（code）」を取得する。
- * http://localhost/#access_token=QNIHZyFk....&&token_type=Bearer&expires_in=3600&code=PPLmDh8T
- * この code=PPLmDh8T がわかればOKです
- * このコードを次のプログラムに渡しましょう
- */
+exit;
