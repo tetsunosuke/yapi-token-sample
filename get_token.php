@@ -1,8 +1,11 @@
 <?php
 if (!isset($_GET["code"])) {
+    // パラメータに code=??? がついていなければJSの書かれたHTMLを表示して終了
     echo file_get_contents("get_token.html");
     exit;
 }
+
+// code=??? が入っていたらそれを用いてトークンを取得
 define('CODE',$_GET["code"]);
 define('APPID', 'dj00aiZpPUVKV3J4MGZWYkEzMyZzPWNvbnN1bWVyc2VjcmV0Jng9NTk-');
 define('SECRET', 'a8mx7pufdFZXe41FSZIw4vuKLOLKAerdXk9IYxc6');
@@ -65,7 +68,7 @@ $token = json_decode($response, true);
 
 // 実行した結果は下記に別枠で記載しております。
 $keys = ["access_token", "expires_in", "refresh_token"];
-var_dump($token);
 foreach($keys as $key) {
     echo "$key: $token[$key]" . PHP_EOL;
+    echo "<br>";
 }
